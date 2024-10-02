@@ -1,64 +1,122 @@
 
 
-.footwearContainer{
-  width: 300px;
-  height: 200px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+.searchContainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
 }
 
-.img{
-  max-height: 100%;
-  max-width: 100%;
-  fill: white;
+.year{
+    height: 40px;
+    width: 100px;
+    border-radius: 5px;
 }
 
-.img .path_1{
-  fill: white;
+.search{
+    height: 40px;
+    width: 300px;
+    border-radius: 5px;
 }
 
-.img > .path_1 {
-  fill: white;
+.movies{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 100px;
 }
 
-.form{
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
+.movies .movie{
+    width: 200px;
+    height: 300px;
+    border: 1px solid #c1c1c1;
+    border-radius: 5px;
+    position: relative;
+}
+.movies .imgContainer{
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     width: 100%;
+    height: 70%;
 }
 
-.colorContainer{
-  display: flex;
-  flex-direction: column;
+.movies .imgContainer img{
+    max-width: 100%;
+    max-height: 100%;
 }
 
-.controlContainer{
-  width: 600px;
-  height: 200px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+.modal{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.66);
 }
 
-.select{
-  grid-column: 2;
-  height: 50px;
-}
-.size{
-  grid-column: 3;
-  height: 50px;
+.movieDescription{
+    position: relative;
+    background: white;
+    flex-direction: column;
+    color: #1a1a1a;
+    width: 300px;
+    height: 500px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
 
-.brand{
-  width: 100%;
-  height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-  font-size: 22px;
+.modal .imgContainer{
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 30%;
 }
+
+.modal .imgContainer img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+.movie{
+    color: black;
+}
+
+.displayNone{
+    display: none;
+}
+
+.closeModal{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #acacac;
+    border-radius: 5px;
+}
+.closeModal:hover{
+    background: #919191;
+}
+
+.description{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5px;
+}
+
+

@@ -1,99 +1,98 @@
 import {useEffect, useState} from 'react'
-import styles from './App.module.css'
-import  './App.css'
-import Svg from "./Svg.jsx";
-import { HexColorPicker } from "react-colorful";
 
+import s from './App.module.css'
+
+function getMovies(params, action){
+    // Default options are marked with *
+    fetch(`http://www.omdbapi.com/?apikey=d349d42&${params}`, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+
+    }).then(response => {
+        if(response.status === 200)
+              return response.json()
+
+    })
+        .then(data => {
+            if(data.Response === "True")
+                action(data);
+        })
+}
+
+
+function search(text, year, setMovies){
+    return getMovies(`${text.length > 0 ? `s=${text}` : ""}${year ? `&y=${year}` : ""}`, (data) => setMovies(data.Search))
+}
+
+function getMovie(id, setMovie){
+    return getMovies(`i=${id}`, (movie) => {
+        console.log(movie);
+        setMovie(movie);
+    })
+}
 
 function App() {
-  const [listSize, setListSize] = useState([])
-  const [listBrand, setListBrand] = useState([])
 
-  const [color, setColor] = useState("#fff")
-  const [brand, setBrand] = useState("No name")
-
-
-
-    const [colorChecked, setColorChecked] = useState(false);
-    const [brandChecked, setBrandChecked] = useState(false);
-    const [sizeChecked, setSizeChecked] = useState(false);
-
+    const [movie, setMovie] = useState(undefined);
+    const [isOpen, setIsOpen] = useState(false);
+    const [text, setText] = useState("");
+    const [year, setYear] = useState("");
+    const [movies, setMovies] = useState([]);
 
     useEffect(() => {
+        setText("love");
+        search(text, "", setMovies)
+    }, [text, setText, setMovies]);
 
-        // Default options are marked with *
-        fetch("http://localhost:3001/data", {
-            method: "GET", // *GET, POST, PUT, DELETE, etc.
-
-        }).then(response => response.json())
-          .then(data => {
-              setListSize(data.size)
-              setListBrand(data.brand)
-        })
-
-
-
-    }, []);
-
-    function sendForm(){
-            alert()
-    }
 
   return (
-
     <>
-        <div className={styles.footwearContainer}>
-            <div className={styles.brand}>{brand}</div>
-            <Svg color={color}/>
+
+        <div className={s.searchContainer}>
+            <input type="text" className={s.year} placeholder={"Year"} value={year} onChange={e => setYear(e.target.value)}/>
+            <input type="text" className={s.search} placeholder={"Search"} value={text} onChange={e => setText(e.target.value)}/>
+            <button onClick={() => search(text, year, setMovies)}>Send</button>
         </div>
 
-        <div className={styles.controlContainer}>
-            <HexColorPicker style={{display: !colorChecked ? "none" : undefined}} color={color} onChange={setColor}/>
-            <select
-                onChange={e => setBrand(e.target.value)}
-                value={brand}
-                className={styles.select} style={{display: !brandChecked ? "none" : undefined}}>
-                <option  key={-1}>No name</option>
-                {
-                    listBrand.map((item, index) =>
-                        <option key={index}>
-                            {item}
-                        </option>)
-                }
-            </select>
-
-            <select className={styles.size} style={{display: !sizeChecked ? "none" : undefined}}>
-                {
-                    listSize.map((item, index) =>
-                        <option key={index}>
-                            {item}
-                        </option>)
-                }
-            </select>
+        <div className={s.movies}>
+            {movies.map((movie) =>
+                <>
+                    <div className={s.movie} onClick={() => { getMovie(movie.imdbID, setMovie);  setIsOpen(true)}}>
+                        <div className={s.imgContainer}>
+                            <img src={movie.Poster} alt=""/>
+                        </div>
+                        <div className={s.title}>
+                            {movie.Title}
+                        </div>
+                        <div className={s.title}>
+                            {movie.Title}
+                        </div>
+                    </div>
+                </>
+             )}
         </div>
 
-        {
-            <form className={styles.form}>
-                <label>
-                    Size:
-                    <input type="checkbox" name="size" onChange={() => setSizeChecked(!sizeChecked)}/>
-                </label>
+        <div style={{display: !isOpen ? "none" : undefined }} className={s.modal}>
+            <div className={s.movieDescription}>
+                <div className={s.closeModal} onClick={() => {setMovie(undefined); setIsOpen(false)}}>x</div>
+                <div style={{display: movie !== undefined ? "none" : undefined}}>Загрузка...</div>
 
-                <div className={styles.colorContainer}>
-                    <label>
-                        Color:
-                        <input type="checkbox" name="color"  onChange={() => setColorChecked(!colorChecked)}/>
-                    </label>
+                {movie !== undefined && <>
+                        <div className={s.imgContainer}>
+                            <img src={movie.Poster} alt=""/>
+                        </div>
+                        <div className={s.description}>
+                            <span>Title:</span> {movie.Title}
+                            <span>Year:</span> {movie.Year}
+                            <span>Actors:</span> {movie.Actors}
+                            <span>Country:</span> {movie.Country}
+                            <span>Released:</span> {movie.Released}
+                        </div>
 
-                </div>
 
-                <label>
-                    Brand:
-                    <input type="checkbox" name="brand" onChange={() => setBrandChecked(!brandChecked)}/>
-                </label>
-                <button onClick={() => sendForm()}>Pay</button>
-            </form>
-        }
+                </>}
+
+            </div>
+        </div>
 
     </>
   )
